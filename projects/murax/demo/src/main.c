@@ -2,6 +2,20 @@
 
 #include <murax.h>
 
+void uart_putc(char ch)
+{
+    uart_write(UART, ch);
+}
+
+void uart_puts(char *s)
+{
+    uint32_t i;
+    for(i = 0; s[i] != '\0'; i++) {
+        uart_putc(s[i]);
+    }
+}
+
+static char sys_banner[] = {"MuraxSoC system buildtime [" __TIME__" " __DATE__ "] " "rev 1.0\r\n"};
 
 void main() {
 	volatile uint32_t a = 1, b = 2, c = 3;
@@ -23,19 +37,27 @@ void main() {
 	GPIO_A->OUTPUT = 0x00000000;
 
 	UART->STATUS = 2; //Enable RX interrupts
-	UART->DATA = 'A';
+
+	//UART->DATA = 'B';
+
+    uart_puts("## MuraxSoC ##\r\n");
+    uart_puts(sys_banner);
+    uart_puts("Hello, iCESugar!\r\n");
 
 	while(1){
+#if 0
 		result += a;
 		result += b + c;
 		for(uint32_t idx = 0;idx < 50000;idx++) asm volatile("");
 		GPIO_A->OUTPUT = (GPIO_A->OUTPUT & ~0x3F) | ((GPIO_A->OUTPUT + 1) & 0x3F);  //Counter on LED[5:0]
+#endif
+		GPIO_A->OUTPUT ^= 0xFF;
 	}
 }
 
 void irqCallback(){
 	if(TIMER_INTERRUPT->PENDINGS & 1){  //Timer A interrupt
-		GPIO_A->OUTPUT ^= 0x80; //Toogle led 7
+		//GPIO_A->OUTPUT ^= 0x80; //Toogle led 7
 		TIMER_INTERRUPT->PENDINGS = 1;
 	}
 	while(UART->STATUS & (1 << 9)){ //UART RX interrupt
