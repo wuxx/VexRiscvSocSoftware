@@ -3,13 +3,17 @@
 #include <murax.h>
 
 /* MAP PMOD-LED to GPIO */
-uint8_t led_map[8] = {7, 6, 5, 4, 0, 1, 2, 3};
+/* PMOD3 */
+//uint8_t led_map[8] = {7, 6, 5, 4, 0, 1, 2, 3};
+
+/* PMOD2 */
+uint8_t led_map[8] = {15, 14, 13, 12, 8, 9, 10, 11};
 
 /* LED_x to gpio */
-uint8_t make_led(uint8_t l)
+uint32_t make_led(uint8_t l)
 {
-    uint8_t g = 0;
-    uint8_t i;
+    uint32_t g = 0;
+    uint32_t i;
 
     for(i = 0; i < 8; i++) {
         if (l & (0x1 << i)) {
@@ -75,7 +79,7 @@ void main() {
 }
 
 void irqCallback(){
-    static uint8_t x = 0, g = 0;
+    static uint32_t x = 0, g = 0;
 	if(TIMER_INTERRUPT->PENDINGS & 1){  //Timer A interrupt
 		//GPIO_A->OUTPUT ^= 0x80; //Toogle led 7
 		//GPIO_A->OUTPUT = ~(make_led(0x1 << ((x++) % 8)));

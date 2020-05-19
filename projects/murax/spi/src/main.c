@@ -86,12 +86,21 @@ void uart_putc(char ch);
 #define ILI9341_GREENYELLOW 0xAFE5      /* 173, 255,  47 */
 #define ILI9341_PINK        0xF81F
 
+#if 0
 #define GPIO_TFT_DC		(0xA0)
 
 #define GPIO_SPI_CS		(0xA1)
 #define GPIO_SPI_CLK	(0xA2)
 #define GPIO_SPI_MOSI	(0xA3)
 #define GPIO_SPI_MISO	(0xA4)
+#endif
+
+#define GPIO_TFT_DC		(0xAA)
+
+#define GPIO_SPI_CS		(0xAF)
+#define GPIO_SPI_CLK	(0xAC)
+#define GPIO_SPI_MOSI	(0xAE)
+#define GPIO_SPI_MISO	(0xAD)
 
 void delay(int x)
 {
